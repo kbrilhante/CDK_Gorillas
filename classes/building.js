@@ -4,7 +4,8 @@ class Building {
         this.tilesW = tilesW;
         this.tilesH = tilesH;
         this.tiles = [];
-        this.mainColor = random(["cyan", "red", "grey"]);
+        // this.mainColor = random(["cyan", "red", "grey"]);
+        this.mainColor = "#fff";
         this.window = this.pickNewWindowColor();
         this.build(tileSize, columnWidth);
     }
@@ -47,9 +48,21 @@ class Building {
         }
     }
     pickNewWindowColor() {
-        return color(random(["#454545", "yellow"]));
+        return color(random(["#454545", "#FFFFAD"]));
     }
     pickWindowColorBelow(j, i) {
         return this.tiles[j - 1][i].color
+    }
+    recolorBuilding(newColor) {
+        this.mainColor = newColor;
+        for (let j = 0; j < this.tiles.length; j++) {
+            const floor = this.tiles[j];
+            for (let i = 0; i < floor.length; i++) {
+                const tile = floor[i];
+                if (tile.getColor() === "#fff") {
+                    tile.setColor(this.mainColor);
+                }
+            }
+        }
     }
 }

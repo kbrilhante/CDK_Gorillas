@@ -24,6 +24,14 @@ function draw() {
     for (let i = 0; i < buildings.length; i++) {
         buildings[i].display();
     }
+
+    
+}
+
+function mousePressed() {
+    for (let i = 0; i < buildings.length; i++) {
+        buildings[i].collision(mouseX, mouseY, 20);
+    }
 }
 
 function buildTheBuildings() {
@@ -53,9 +61,10 @@ function colorTheBuildings() {
     let hue = 0;
     for (let i = 0; i < buildings.length; i++) {
         const building = buildings[i];
-        const newColor = color(hue, 100, 50);
+        const newColor = color(hue, 100, 60);
         building.recolorBuilding(newColor);
         hue += 100 / buildings.length;
     }
     pop();
 }
+

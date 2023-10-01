@@ -2,12 +2,13 @@ const properties = {
     tileSize: 2,
     columnWidth: 4,
     gap: 2,
-    columns: [3, 6],
+    columns: [3, 5],
     floors: [4, 10],
     sky: "#86CCFD"
 }
 let canvas;
 let buildings = [];
+let bunny1, bunny2;
 
 function preload() { }
 
@@ -16,6 +17,9 @@ function setup() {
 
     buildTheBuildings();
     colorTheBuildings();
+
+    bunny1 = new Player(1, buildings);
+    bunny2 = new Player(2, buildings);
 }
 
 function draw() {
@@ -25,7 +29,8 @@ function draw() {
         buildings[i].display();
     }
 
-    
+    bunny1.display();
+    bunny2.display();
 }
 
 function mousePressed() {

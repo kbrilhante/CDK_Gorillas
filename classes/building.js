@@ -3,11 +3,13 @@ class Building {
         this.x = x;
         this.tilesW = tilesW;
         this.tilesH = tilesH;
+        this.tileSize = tileSize;
+        this.columnWidth = columnWidth;
         this.tiles = [];
         // this.mainColor = random(["cyan", "red", "grey"]);
         this.mainColor = "#fff";
-        this.window = this.pickNewWindowColor();
-        this.build(tileSize, columnWidth);
+        this.window = "#000";
+        this.build(this.tileSize, this.columnWidth);
     }
     build(tileSize, columnWidth) {
         for (let j = 0; j < this.tilesH; j++) {
@@ -79,5 +81,12 @@ class Building {
                 }
             }
         }
+    }
+    getTop() {
+        const top = {
+            x: this.x + (this.tilesW * this.tileSize) / 2,
+            y: height - (this.tilesH * this.tileSize) + this.tileSize
+        }
+        return top;
     }
 }

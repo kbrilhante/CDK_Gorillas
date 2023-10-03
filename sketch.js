@@ -1,6 +1,6 @@
 const properties = {
-    tileSize: 2,
-    columnWidth: 4,
+    tileSize: 4,
+    columnWidth: 2,
     gap: 2,
     columns: [3, 5],
     floors: [4, 10],

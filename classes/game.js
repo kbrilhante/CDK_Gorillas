@@ -1,21 +1,44 @@
 class Game {
     constructor() {
+        this.gameStart = false;
+        this.gameOver = false;
+        this.turn = 0;
         this.tileSize = 6;
         this.columnWidth = 1;
         this.gap = 2;
         this.columns = [4, 6];
         this.floors = [4, 14];
         this.sky = "#86CCFD";
+        this.gravity = 9.8;
+        this.wind = 0;
         this.buildings = [];
-
+        this.roaches = [];
     }
     start() {
         this.buildTheBuildings();
         this.colorTheBuildings();
+        this.bunny1 = new Player(1, this.buildings);
+        this.bunny2 = new Player(2, this.buildings);
+    }
+    display() {
+        this.displayBuildings();
+        this.displayBunnies();
+        this.displayRoaches();
     }
     displayBuildings() {
         for (let i = 0; i < this.buildings.length; i++) {
             this.buildings[i].display();
+        }
+    }
+    displayBunnies() {
+        this.bunny1.display();
+        this.bunny2.display();
+    }
+    displayRoaches() {
+        for(let i = 0; i < this.roaches.length; i++) {
+            const roach = this.roaches[i];
+            roach.move();
+            roach.display();
         }
     }
     buildTheBuildings() {

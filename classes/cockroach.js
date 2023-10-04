@@ -33,7 +33,19 @@ class Cockroach {
     shoot() {
         const d = dist(this.x, this.y, mouseX, mouseY);
         this.speed = d / 10;
-        
+        this.angle = atan2(abs(this.y - mouseY), abs(this.x - mouseX));
+        this.vector = p5.Vector.fromAngle(this.angle);
+        this.vector.mult(this.speed);
+        this.dx = this.vector.x;
+        if (mouseX < this.x) {
+            this.dx *= -1;
+        }
+        this.dy = this.vector.y;
+        if (mouseY < this.y) {
+            this.dy *= -1;
+        }        
+        console.log(this.dx)
+
         this.isFlying = true;
     }
     move(gravity, wind) {

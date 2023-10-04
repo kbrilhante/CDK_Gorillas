@@ -1,6 +1,6 @@
 const properties = {
-    tileSize: 4,
-    columnWidth: 2,
+    tileSize: 6,
+    columnWidth: 1,
     gap: 2,
     columns: [3, 5],
     floors: [4, 10],
@@ -31,6 +31,8 @@ function draw() {
 
     bunny1.display();
     bunny2.display();
+
+    ellipse(mouseX, mouseY, 20);
 }
 
 function mousePressed() {

@@ -21,9 +21,13 @@ function mousePressed() {
     //     game.buildings[i].collision(mouseX, mouseY, 20);
     // }
     
-    game.makeARoach();
+    if(game.turnEnded()) {
+        game.makeARoach();
+    }
 }
 
 function mouseReleased() {
-    game.shoot();
+    if(game.turnEnded()) {
+        game.shoot();
+    }
 }

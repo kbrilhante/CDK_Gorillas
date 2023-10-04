@@ -3,6 +3,7 @@ class Game {
         this.gameStart = false;
         this.gameOver = false;
         this.turn = 0;
+        this.endTurn = true;
         this.tileSize = 6;
         this.columnWidth = 1;
         this.gap = 2;
@@ -88,7 +89,7 @@ class Game {
     }
     shoot() {
         this.roaches[this.roaches.length - 1].shoot();
-        // this.newTurn();
+        this.endTurn = false;
     }
     changeWind() {
         this.wind = random([-1, 1])*random(14);
@@ -99,8 +100,12 @@ class Game {
         if (dice === 7) {
             this.changeWind();
         }
+        this.endTurn = true;
     }
     getTurn() {
         return this.turn % 2;
+    }
+    turnEnded() {
+        return this.endTurn;
     }
 }

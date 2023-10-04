@@ -23,8 +23,11 @@ class Tile {
     setColor(newColor) {
         this.color = newColor;
     }
-    destroy() {
+    destroy(building) {
         this.destroyed = true;
+        const floor = building.tiles[this.floor];
+        const i = floor.indexOf(this);
+        floor.splice(i, 1);
     }
     isDestroyed() {
         return this.destroyed;

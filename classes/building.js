@@ -68,15 +68,15 @@ class Building {
         }
     }
     collision(x, y, radius) {
-        for (let j = 0; j < this.tiles.length; j++) {
+        for (let j = this.tiles.length - 1; j >= 0; j--) {
             const floor = this.tiles[j];
-            for (let i = 0; i < floor.length; i++) {
+            for (let i = floor.length - 1; i >= 0; i--) {
                 const tile = floor[i];
                 if (!tile.isDestroyed()) {
                     const center = tile.getCenter();
                     const d = dist(x, y, center.x, center.y);
                     if (d <= radius) {
-                        tile.destroy();
+                        tile.destroy(this);
                     }
                 }
             }

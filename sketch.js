@@ -12,19 +12,18 @@ function setup() {
 function draw() {
     background(game.sky);
     game.display();
-
     
+    // game.roaches.push(new Cockroach(random(width), random(100)));
 }
 
 function mousePressed() {
-    for (let i = 0; i < game.buildings.length; i++) {
-        game.buildings[i].collision(mouseX, mouseY, 20);
-    }
-
-    game.roaches.push(new Cockroach(mouseX, mouseY));
+    // for (let i = 0; i < game.buildings.length; i++) {
+    //     game.buildings[i].collision(mouseX, mouseY, 20);
+    // }
+    
+    game.makeARoach();
 }
 
-
-
-
-
+function mouseReleased() {
+    game.shoot();
+}

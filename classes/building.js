@@ -67,7 +67,7 @@ class Building {
             }
         }
     }
-    collision(x, y, radius) {
+    collision(x, y, radius, roach) {
         for (let j = this.tiles.length - 1; j >= 0; j--) {
             const floor = this.tiles[j];
             for (let i = floor.length - 1; i >= 0; i--) {
@@ -76,6 +76,9 @@ class Building {
                     const center = tile.getCenter();
                     const d = dist(x, y, center.x, center.y);
                     if (d <= radius) {
+                        if (roach) {
+                            roach.collided = true;
+                        }
                         tile.destroy(this);
                     }
                 }

@@ -3,7 +3,8 @@ class Game {
         this.gameStart = false;
         this.gameOver = false;
         this.turn = 0;
-        this.endTurn = true;
+        this.turnBegan = false;
+        this.turnEnded = false;
         this.tileSize = 6;
         this.columnWidth = 1;
         this.gap = 2;
@@ -13,40 +14,50 @@ class Game {
         this.gravity = 0;
         this.wind = 0;
         this.buildings = [];
-        this.roaches = [];
+        this.bunnies = [];
+        this.roach = "";
     }
     start() {
         this.buildTheBuildings();
         this.colorTheBuildings();
         this.changeWind();
         this.gravity = 9.8;
-        this.bunny1 = new Player(1, this.buildings);
-        this.bunny2 = new Player(2, this.buildings);
+        this.createBunnies();
     }
     display() {
         this.displayBuildings();
         this.displayBunnies();
         this.displayRoaches();
+        if (this.turnBegan && this.turnEnded) {
+            this.newTurn();
+        }
     }
     displayBuildings() {
         for (let i = 0; i < this.buildings.length; i++) {
             this.buildings[i].display();
         }
     }
-    displayBunnies() {
-        this.bunny1.display();
-        this.bunny2.display();
-    }
-    displayRoaches() {
-        for(let i = this.roaches.length - 1; i >= 0; i--) {
-            const roach = this.roaches[i];
-            roach.move(this.gravity, this.wind);
-            if (roach.y > height * 2) {
-                roach.destroy(this.roaches);
-            }
-            roach.display();
+    createBunnies() {
+        for (let i = 0; i < 2; i++) {
+            this.bunnies.push(new Player(i, this.buildings));
         }
     }
+    displayBunnies() {
+        for (let i = 0; i < this.bunnies.length; i++) {
+            this.bunnies[i].display();
+        }
+
+    }
+    displayRoaches() {
+        if (this.roach) {
+            if (this.roach.isFlying && !this.roach.collided) {
+                this.roach.move(this.gravity, this.wind);
+                this.turnEnded = this.roach.checkCollisions(this.buildings, this.bunnies);
+                // this.roach.checkCollisions(this.buildings, this.bunnies);
+            }
+            this.roach.display();
+        }
+    }   
     buildTheBuildings() {
         let buildingX = 0;
         while (buildingX < width - this.tileSize * this.columnWidth * 3) {
@@ -78,34 +89,33 @@ class Game {
         pop();
     }
     makeARoach() {
-        let pos;
-        if (this.getTurn()) {
-            pos = this.bunny1.pos;
-        } else {
-            pos = this.bunny2.pos;
+        const pos = this.bunnies[this.getTurn()].pos;
+        this.roach = new Cockroach(pos.x, pos.y, this.bunnies[0].radius);
+    }
+    waitingForShot() {
+        if (!this.turnBegan && !this.turnEnded) {
+            return true;
         }
-        const roach = new Cockroach(pos.x, pos.y);
-        this.roaches.push(roach);
+        return false;
     }
     shoot() {
-        this.roaches[this.roaches.length - 1].shoot();
-        this.endTurn = false;
+        this.roach.shoot();
+        this.turnBegan = true;
     }
     changeWind() {
         this.wind = random([-1, 1])*random(14);
     }
     newTurn() {
         this.turn++;
+        this.roach = "";
         const dice = floor(random(100));
         if (dice === 7) {
             this.changeWind();
         }
-        this.endTurn = true;
+        this.turnBegan = false;
+        this.turnEnded = false;
     }
     getTurn() {
         return this.turn % 2;
-    }
-    turnEnded() {
-        return this.endTurn;
     }
 }

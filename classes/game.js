@@ -13,18 +13,21 @@ class Game {
         this.sky = "#86CCFD";
         this.gravity = 0;
         this.wind = 0;
+        this.clouds = [];
         this.buildings = [];
         this.bunnies = [];
         this.roach = "";
     }
     start() {
-        this.buildTheBuildings();
-        this.colorTheBuildings();
         this.changeWind();
         this.gravity = 9.8;
+        this.createClouds();
+        this.buildTheBuildings();
+        this.colorTheBuildings();
         this.createBunnies();
     }
     display() {
+        this.displayClouds();
         this.displayBuildings();
         this.displayBunnies();
         this.displayRoaches();
@@ -32,32 +35,38 @@ class Game {
             this.newTurn();
         }
     }
+    displayClouds() {
+        for (let i = 0; i < this.clouds.length; i++) {
+            this.clouds[i].move();
+            this.clouds[i].display();
+        }
+    }
     displayBuildings() {
         for (let i = 0; i < this.buildings.length; i++) {
             this.buildings[i].display();
-        }
-    }
-    createBunnies() {
-        for (let i = 0; i < 2; i++) {
-            this.bunnies.push(new Player(i, this.buildings));
         }
     }
     displayBunnies() {
         for (let i = 0; i < this.bunnies.length; i++) {
             this.bunnies[i].display();
         }
-
+        
     }
     displayRoaches() {
         if (this.roach) {
             if (this.roach.isFlying && !this.roach.collided) {
                 this.roach.move(this.gravity, this.wind);
                 this.turnEnded = this.roach.checkCollisions(this.buildings, this.bunnies);
-                // this.roach.checkCollisions(this.buildings, this.bunnies);
             }
             this.roach.display();
         }
-    }   
+    }
+    createClouds() {
+        for (let i = 0; i < 5; i++) {
+            let cloud = new Cloud(width / 4 * i + width / 8, this.wind);
+            this.clouds.push(cloud);
+        }
+    }
     buildTheBuildings() {
         let buildingX = 0;
         while (buildingX < width - this.tileSize * this.columnWidth * 3) {
@@ -88,6 +97,11 @@ class Game {
         }
         pop();
     }
+    createBunnies() {
+        for (let i = 0; i < 2; i++) {
+            this.bunnies.push(new Player(i, this.buildings));
+        }
+    }
     makeARoach() {
         const pos = this.bunnies[this.getTurn()].pos;
         this.roach = new Cockroach(pos.x, pos.y, this.bunnies[0].radius);
@@ -104,6 +118,9 @@ class Game {
     }
     changeWind() {
         this.wind = random([-1, 1])*random(14);
+        for (let i = 0; i < this.clouds.length; i++) {
+            this.clouds[i].speed = this.wind;
+        }
     }
     newTurn() {
         this.turn++;

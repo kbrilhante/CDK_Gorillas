@@ -1,9 +1,14 @@
-let game;
+let game, spriteSheet, spriteJSON;
+let sprites = {};
 
-function preload() { }
+function preload() {
+    spriteSheet = loadImage("./assets/bunny.png");
+    spriteJSON = loadJSON("./assets/bunny.json");
+}
 
 function setup() {
     createCanvas(800, 600);
+    sortSprites();
 
     game = new Game();
     game.start();
@@ -29,5 +34,24 @@ function mousePressed() {
 function mouseReleased() {
     if(game.waitingForShot()) {
         game.shoot();
+    }
+}
+
+function sortSprites() {
+    const frames = spriteJSON.frames;
+    const keys = Object.keys(frames);
+    // const folders = new Set();
+    // for (const key of keys) {
+    //     const splitKey = key.split("/");
+    //     folders.add(splitKey[0]);
+    // }
+    // folders.forEach(aniKey => {
+    //     const aniFrames = [];
+        
+    //     console.log(aniFrames);
+    // });
+    for (const key of keys) {
+        const aniKey = key.split("/")[0];
+        console.log(frames[key])
     }
 }

@@ -1,6 +1,8 @@
 class Cockroach {
     constructor(x, y, offset) {
+        this.ani = sprites.Carrot;
         this.radius = 10;
+        this.scale = this.radius * 2 / this.ani[0].width;
         this.x = x;
         this.y = y - offset - this.radius;
         this.dx = 0;
@@ -9,10 +11,13 @@ class Cockroach {
         this.speed = 0;
         this.isFlying = false;
         this.collided = false;
+        this.frameCount = 0;
+        this.frame = this.ani[this.frameCount];
+        this.frameRate = 1;
     }
     display() {
         if (!this.collided) {
-            const c = "orange";
+            const c = "cyan";
             if (!this.isFlying) {
                 push();
                 fill(c);
@@ -26,11 +31,14 @@ class Cockroach {
                 pop();
             }
             push();
-            fill(c);
-            noStroke();
-            ellipseMode(RADIUS);
-            circle(this.x, this.y, this.radius);
+            // fill(c);
+            // noStroke();
+            // ellipseMode(RADIUS);
+            // circle(this.x, this.y, this.radius);
+            imageMode(CENTER);
+            image(this.frame, this.x, this.y, this.frame.width * this.scale, this.frame.height * this.scale);
             pop();
+            this.animate();
         }
     }
     shoot() {
@@ -80,5 +88,10 @@ class Cockroach {
         if (this.y - this.radius > height) {
             this.collided = true;
         }
+    }
+    animate() {
+        this.frameCount += this.frameRate;
+        const i = floor (this.frameCount % this.ani.length);
+        this.frame = this.ani[i];
     }
 }

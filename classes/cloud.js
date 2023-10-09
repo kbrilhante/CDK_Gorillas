@@ -1,16 +1,17 @@
 class Cloud {
     constructor(x, speed) {
+        this.images = sprites.Cloud;
+        this.image = random(this.images);
         this.w = random(50, 120);
-        this.h = this.w / 3 * 2;
+        this.h = this.w / this.image.width * this.image.height;
         this.x = x;
         this.y = random(this.h, height /2);
         this.speed = speed;
     }
     display() {
         push();
-        rectMode(CENTER);
-        fill("#fff");
-        rect(this.x, this.y, this.w, this.h);
+        imageMode(CENTER);
+        image(this.image, this.x, this.y, this.w, this.h);
         pop();
     }
     move() {
@@ -25,8 +26,9 @@ class Cloud {
         }
     }
     changeSettings() {
+        this.image = random(this.images);
         this.w = random(50, 120);
-        this.h = this.w / 3 * 2;
+        this.h = this.w / this.image.width * this.image.height;
         this.y = random(this.h, height /2);
     }
 }

@@ -40,18 +40,23 @@ function mouseReleased() {
 function sortSprites() {
     const frames = spriteJSON.frames;
     const keys = Object.keys(frames);
-    // const folders = new Set();
-    // for (const key of keys) {
-    //     const splitKey = key.split("/");
-    //     folders.add(splitKey[0]);
-    // }
-    // folders.forEach(aniKey => {
-    //     const aniFrames = [];
-        
-    //     console.log(aniFrames);
-    // });
+    let lastAniKey = "";
+    let aniArray = [];
     for (const key of keys) {
         const aniKey = key.split("/")[0];
-        console.log(frames[key])
+        const fr = frames[key].frame
+        const img = spriteSheet.get(fr.x, fr.y, fr.w, fr.h);
+        if (lastAniKey != aniKey && lastAniKey) {
+            // add array to sprites
+            addToSprites(lastAniKey, aniArray);
+            aniArray = [];
+        }
+        aniArray.push(img);
+        lastAniKey = aniKey;    
     }
+    addToSprites(lastAniKey, aniArray);
+}
+
+function addToSprites(key, array) {
+    sprites[key] = array;
 }

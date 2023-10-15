@@ -11,7 +11,6 @@ class Player {
             i = buildings.length - 2; 
         }
         this.radius = 20;
-        this.collided = false;
         this.score = 0;
         this.frameCount = 0;
         this.frame = this.ani[this.frameCount];
@@ -25,13 +24,10 @@ class Player {
         this.w = this.radius * 2 * this.scale;
         this.h = this.radius * 2 * this.scale;
         this.pos.y -= this.radius;
-        // this.scale = this.radius * 2 / this.ani[0].width;
-        // this.w = this.frame.width * this.scale;
-        // this.h = this.w * this.frame.height / this.frame.width;
-        // this.pos.y -= this.h / 2;
+        this.isDead = false;
     }
     display() {
-        if (!this.collided) {
+        // if (!this.isDead) {
             push();
             // ellipseMode(RADIUS);
             // fill("green");
@@ -46,18 +42,19 @@ class Player {
             }
             pop();
             this.animate();
-        }
+        // }
     }
-    collision(buildings) {
-        this.collided = true;
-        for (let i = 0; i < buildings.length; i++) {
-            const b = buildings[i];
-            b.collision(this.pos.x, this.pos.y, this.radius * 6);
-        }
+    collision() {
+        this.isDead = true;
+        this.changeAnimation("Dead", false);
     }
     changeAnimation(newAnimation, loop) {
         this.ani = sprites[newAnimation];
+        this.frameCount = 0;
         this.loop = loop;
+        if (newAnimation === "Dead") {
+            this.frameRate = 0.4;
+        }
     }
     animate() {
         if (!this.aniPaused) {
@@ -66,7 +63,11 @@ class Player {
         const i = floor (this.frameCount % this.ani.length);
         this.frame = this.ani[i];
         if (!this.loop && i === this.ani.length - 1) {
-            this.changeAnimation("Idle", true);
+            if (this.isDead) {
+                this.frameRate = 0;
+            } else {
+                this.changeAnimation("Idle", true);
+            }
         }
     }
 

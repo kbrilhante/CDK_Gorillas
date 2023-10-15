@@ -25,6 +25,7 @@ class Game {
         this.buildTheBuildings();
         this.colorTheBuildings();
         this.createBunnies();
+        this.gameStart = true;
     }
     display() {
         this.displayClouds();
@@ -110,7 +111,7 @@ class Game {
         bunny.aniPaused = true;
     }
     waitingForShot() {
-        if (!this.turnBegan && !this.turnEnded) {
+        if (!this.turnBegan && !this.turnEnded && this.gameStart && !this.gameOver) {
             return true;
         }
         return false;
@@ -130,7 +131,7 @@ class Game {
     newTurn() {
         this.turn++;
         this.roach = "";
-        const dice = floor(random(100));
+        const dice = floor(random(10));
         if (dice === 7) {
             this.changeWind();
         }
@@ -139,5 +140,14 @@ class Game {
     }
     getTurn() {
         return this.turn % 2;
+    }
+    checkGameOver() {
+        for (let i = 0; i < this.bunnies.length; i++) {
+            const b = this.bunnies[i];
+            if (b.isDead) {
+                this.gameOver = true;
+            }
+        }
+        return this.gameOver;
     }
 }

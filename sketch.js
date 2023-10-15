@@ -17,15 +17,10 @@ function setup() {
 function draw() {
     background(game.sky);
     game.display();
-    
-    // game.roaches.push(new Cockroach(random(width), random(100)));
+    game.checkGameOver();
 }
 
 function mousePressed() {
-    // for (let i = 0; i < game.buildings.length; i++) {
-    //     game.buildings[i].collision(mouseX, mouseY, 20);
-    // }
-    
     if(game.waitingForShot()) {
         game.makeARoach();
     }

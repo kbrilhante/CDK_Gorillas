@@ -66,18 +66,18 @@ class Cockroach {
         this.y += this.dy;
         this.x += this.dx + wind;
     }
-    checkCollisions(buildings, players) {
-        this.checkCollisionPlayers(players, buildings);
+    checkCollisions(buildings, bunnies) {
+        this.checkCollisionBunnies(bunnies);
         this.checkCollisionsBuildings(buildings);
         this.checkOffSceen();
         return this.collided
     }
-    checkCollisionPlayers(players, buildings) {
-        for (let i = 0; i < players.length; i++) {
-            const p = players[i];
-            const d = dist(this.x, this.y, p.pos.x, p.pos.y);
-            if (d < this.radius + p.radius) {
-                p.collision(buildings);
+    checkCollisionBunnies(bunnies) {
+        for (let i = 0; i < bunnies.length; i++) {
+            const bunny = bunnies[i];
+            const d = dist(this.x, this.y, bunny.pos.x, bunny.pos.y);
+            if (d < this.radius + bunny.radius) {
+                bunny.collision();
                 this.collided = true;
             }
         }
@@ -85,7 +85,7 @@ class Cockroach {
     checkCollisionsBuildings(buildings) {
         for (let i = 0; i < buildings.length; i++) {
             const b = buildings[i];
-            b.collision(this.x, this.y, this.radius, this);
+            b.collision(this.x, this.y, this.radius * 1.2, this);
         }
     }
     checkOffSceen() {

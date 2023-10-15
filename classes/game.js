@@ -103,8 +103,11 @@ class Game {
         }
     }
     makeARoach() {
-        const pos = this.bunnies[this.getTurn()].pos;
-        this.roach = new Cockroach(pos.x, pos.y, this.bunnies[0].radius);
+        const bunny = this.bunnies[this.getTurn()]
+        const pos = bunny.pos;
+        this.roach = new Cockroach(pos.x, pos.y, bunny.index, bunny.radius);
+        bunny.changeAnimation("Throw", false);
+        bunny.aniPaused = true;
     }
     waitingForShot() {
         if (!this.turnBegan && !this.turnEnded) {
@@ -113,6 +116,8 @@ class Game {
         return false;
     }
     shoot() {
+        const bunny = this.bunnies[this.getTurn()];
+        bunny.aniPaused = false;
         this.roach.shoot();
         this.turnBegan = true;
     }

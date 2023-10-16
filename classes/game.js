@@ -17,10 +17,16 @@ class Game {
         this.buildings = [];
         this.bunnies = [];
         this.roach = "";
+        this.matches = 0;
+    }
+    setOptions(obj) {
+        this.gravity = 9.8;
+        this.bunnies[0].name = obj.bunny1;
+        this.bunnies[1].name = obj.bunny2;
+        this.matches = obj.matches;
     }
     start() {
         this.changeWind();
-        this.gravity = 9.8;
         this.createClouds();
         this.buildTheBuildings();
         this.colorTheBuildings();
@@ -28,6 +34,7 @@ class Game {
         this.gameStart = true;
     }
     display() {
+        background(this.sky);
         this.displayClouds();
         this.displayBuildings();
         this.displayBunnies();
@@ -150,4 +157,5 @@ class Game {
         }
         return this.gameOver;
     }
+
 }

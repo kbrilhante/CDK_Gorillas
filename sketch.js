@@ -1,4 +1,5 @@
 let game, spriteSheet, spriteJSON;
+let startScreen;
 let sprites = {};
 
 function preload() {
@@ -9,15 +10,20 @@ function preload() {
 function setup() {
     createCanvas(800, 600);
     sortSprites();
-
+    startScreen = new StartScreen();
+    
     game = new Game();
-    game.start();
+    // game.start();
 }
 
 function draw() {
-    background(game.sky);
-    game.display();
-    game.checkGameOver();
+    if (startScreen.isActive) {
+        startScreen.handleSlider();
+    }
+    if (game.gameStart) {
+        game.display();
+        game.checkGameOver();
+    }
 }
 
 function mousePressed() {

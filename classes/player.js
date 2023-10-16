@@ -1,5 +1,6 @@
 class Player {
     constructor(index, buildings) {
+        this.name = "";
         this.ani = sprites.Idle;
         this.aniLoop = true;
         this.aniPaused = false;
@@ -25,6 +26,7 @@ class Player {
         this.h = this.radius * 2 * this.scale;
         this.pos.y -= this.radius;
         this.isDead = false;
+        this.score = 0;
     }
     display() {
         // if (!this.isDead) {
@@ -70,5 +72,4 @@ class Player {
             }
         }
     }
-
 }

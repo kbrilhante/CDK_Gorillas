@@ -1,6 +1,7 @@
 class Game {
     constructor() {
         this.gameStart = false;
+        this.matchOver = false;
         this.gameOver = false;
         this.turn = 0;
         this.turnBegan = false;
@@ -17,9 +18,12 @@ class Game {
         this.buildings = [];
         this.bunnies = [];
         this.roach = "";
+        this.options = {};
+        this.scores = [0, 0];
         this.matches = 0;
     }
     setOptions(obj) {
+        this.options = obj;
         this.gravity = 9.8;
         this.bunnies[0].name = obj.bunny1;
         this.bunnies[1].name = obj.bunny2;
@@ -39,6 +43,7 @@ class Game {
         this.displayBuildings();
         this.displayBunnies();
         this.displayRoaches();
+        this.displayInfo();
         if (this.turnBegan && this.turnEnded) {
             this.newTurn();
         }
@@ -58,7 +63,6 @@ class Game {
         for (let i = 0; i < this.bunnies.length; i++) {
             this.bunnies[i].display();
         }
-        
     }
     displayRoaches() {
         if (this.roach) {
@@ -68,6 +72,39 @@ class Game {
             }
             this.roach.display();
         }
+    }
+    displayInfo() {
+        for (let i = 0; i < this.bunnies.length; i++) {
+            this.bunnies[i].score = this.scores[i];
+            this.displayBunnyInfo(this.bunnies[i], i);
+        }
+    }
+    displayBunnyInfo(bunny, index) {
+        let x = 10;
+        const y = 10;
+        const size = 26;
+        const name = bunny.name;
+        const score = bunny.score;
+        push();
+        textSize(size);
+        textLeading(size * 1.4);
+        textFont("Verdana");
+        textStyle(BOLD);
+        fill(0);
+        if (this.getTurn() === index) {
+            strokeWeight(6);
+            stroke(255);
+        } else {
+            noStroke();
+        }
+        if (index === 0) {
+            textAlign(LEFT, TOP);
+        } else {
+            textAlign(RIGHT, TOP);
+            x = width - x;
+        }
+        text(name + "\n" + score, x, y)
+        pop();
     }
     createClouds() {
         for (let i = 0; i < 5; i++) {
@@ -118,7 +155,7 @@ class Game {
         bunny.aniPaused = true;
     }
     waitingForShot() {
-        if (!this.turnBegan && !this.turnEnded && this.gameStart && !this.gameOver) {
+        if (!this.turnBegan && !this.turnEnded && this.gameStart && !this.gameOver && !this.matchOver) {
             return true;
         }
         return false;
@@ -130,7 +167,7 @@ class Game {
         this.turnBegan = true;
     }
     changeWind() {
-        this.wind = random([-1, 1])*random(14);
+        this.wind = random([-1, 1]) * random(14);
         for (let i = 0; i < this.clouds.length; i++) {
             this.clouds[i].speed = this.wind;
         }
@@ -138,7 +175,7 @@ class Game {
     newTurn() {
         this.turn++;
         this.roach = "";
-        const dice = floor(random(10));
+        const dice = floor(random(20));
         if (dice === 7) {
             this.changeWind();
         }
@@ -148,14 +185,55 @@ class Game {
     getTurn() {
         return this.turn % 2;
     }
-    checkGameOver() {
+    checkMatchOver() {
         for (let i = 0; i < this.bunnies.length; i++) {
             const b = this.bunnies[i];
-            if (b.isDead) {
+            if (b.isDead && !this.matchOver) {
+                this.matchOver = true;
+                if (i === 0) {
+                    this.scores[1]++;
+                } else {
+                    this.scores[0]++;
+                }
+            }
+        }
+        if (this.matchOver) {
+            if (this.checkGameOver()) {
+                this.handleGameOver();
+            } else {
+                this.newMatch();
+            }
+        }
+    }
+    checkGameOver() {
+        const goal = ceil(this.matches / 2);
+        for (let i = 0; i < this.scores.length; i++) {
+            if (this.scores[i] === goal) {
                 this.gameOver = true;
             }
         }
         return this.gameOver;
     }
+    newMatch() {
+        let ready = false;
+        for (let i = 0; i < this.bunnies.length; i++) {
+            const b = this.bunnies[i];
+            if (b.isDead && b.frameRate === 0) {
+                ready = true;
+            }
+        }
+        this.reset();
+    }
+    reset() {
+        this.matchOver = false;
+        this.clouds = [];
+        this.buildings = [];
+        this.bunnies = [];
+        this.roach = "";
+        this.start();
+        this.setOptions(this.options);
+    }
+    handleGameOver() {
 
+    }
 }

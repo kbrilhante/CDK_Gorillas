@@ -13,7 +13,6 @@ function setup() {
     startScreen = new StartScreen();
     
     game = new Game();
-    // game.start();
 }
 
 function draw() {
@@ -22,7 +21,7 @@ function draw() {
     }
     if (game.gameStart) {
         game.display();
-        game.checkGameOver();
+        game.checkMatchOver();
     }
 }
 

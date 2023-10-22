@@ -35,6 +35,7 @@ class Game {
         this.buildTheBuildings();
         this.colorTheBuildings();
         this.createBunnies();
+        this.createPlayAgainButton();
         this.gameStart = true;
     }
     display() {
@@ -46,6 +47,9 @@ class Game {
         this.displayInfo();
         if (this.turnBegan && this.turnEnded) {
             this.newTurn();
+        }
+        if (this.gameOver) {
+            this.handleGameOver();
         }
     }
     displayClouds() {
@@ -92,6 +96,7 @@ class Game {
         textStyle(BOLD);
         fill(0);
         if (this.getTurn() === index) {
+            strokeJoin(ROUND);
             strokeWeight(6);
             stroke(255);
         } else {
@@ -154,6 +159,15 @@ class Game {
         bunny.changeAnimation("Throw", false);
         bunny.aniPaused = true;
     }
+    createPlayAgainButton() {
+        this.btnPlayAgain = createButton("Play Again");
+        this.btnPlayAgain.class("btn");
+        this.btnPlayAgain.position((width - this.btnPlayAgain.size().width) / 2, height / 2);
+        this.btnPlayAgain.hide();
+        this.btnPlayAgain.mouseClicked(() => {
+            playAgain();
+        });
+    }
     waitingForShot() {
         if (!this.turnBegan && !this.turnEnded && this.gameStart && !this.gameOver && !this.matchOver) {
             return true;
@@ -197,12 +211,8 @@ class Game {
                 }
             }
         }
-        if (this.matchOver) {
-            if (this.checkGameOver()) {
-                this.handleGameOver();
-            } else {
-                this.newMatch();
-            }
+        if (this.matchOver && !this.checkGameOver()) {
+            this.newMatch();
         }
     }
     checkGameOver() {
@@ -222,7 +232,9 @@ class Game {
                 ready = true;
             }
         }
-        this.reset();
+        if (ready) {
+            this.reset();
+        }
     }
     reset() {
         this.matchOver = false;
@@ -234,6 +246,23 @@ class Game {
         this.setOptions(this.options);
     }
     handleGameOver() {
-
+        const x = width / 2;
+        const y = 100;
+        const size = 50;
+        const m = this.scores.indexOf(max(this.scores));
+        const name = this.bunnies[m].name;
+        push();
+        textSize(size);
+        textLeading(size * 1.4);
+        textFont("Verdana");
+        textStyle(BOLD);
+        fill(0);
+        strokeJoin(ROUND);
+        strokeWeight(12);
+        stroke("#BBFF33");
+        textAlign(CENTER, TOP);
+        text("GAME OVER\n" + name + " wins!", x, y)
+        pop();
+        this.btnPlayAgain.show();
     }
 }

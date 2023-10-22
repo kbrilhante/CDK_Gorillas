@@ -10,9 +10,7 @@ function preload() {
 function setup() {
     createCanvas(800, 600);
     sortSprites();
-    startScreen = new StartScreen();
-    
-    game = new Game();
+    playAgain();
 }
 
 function draw() {
@@ -59,4 +57,11 @@ function sortSprites() {
 
 function addToSprites(key, array) {
     sprites[key] = array;
+}
+
+function playAgain() {
+    removeElements();
+    background(0);
+    startScreen = new StartScreen();
+    game = new Game();
 }

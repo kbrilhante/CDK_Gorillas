@@ -1,8 +1,129 @@
-html, body {
-    padding: 0;
-    margin: 0;
+html,
+body {
+  padding: 0;
+  margin: 0;
 }
 
 body {
-    background-color: rgb(20, 20, 20);
+  background-color: rgb(20, 20, 20);
+  color: #fff;
+}
+
+.startScreenDiv {
+  text-align: center;
+}
+
+.label {
+  display: inline-block;
+  font-family: Verdana;
+  font-size: 22px;
+  padding: 0 10px;
+}
+
+.btn {
+  box-shadow: inset 1px 1px 1px 0px #F9DBEE;
+  background: linear-gradient(to bottom, #F9BCE4 5%, #EA82C5 100%);
+  background-color: #F9BCE4;
+  border-radius: 20px;
+  border: 2px solid #F485CD;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Verdana;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 10px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #CC52A2;
+}
+.btn:hover {
+  background: linear-gradient(to bottom, #EA82C5 5%, #F9BCE4 100%);
+  background-color: #EA82C5;
+}
+.btn:active {
+  position: relative;
+  top: 1px;
+}
+
+/*********** Baseline, reset styles ***********/
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 18rem;
+}
+
+/* Removes default focus */
+input[type="range"]:focus {
+  outline: none;
+}
+
+/******** Chrome, Safari, Opera and Edge Chromium styles ********/
+/* slider track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #34BAFF;
+  border-radius: 0.5rem;
+  height: 1rem;
+}
+
+/* slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: 0px; /* Centers thumb on the track */
+  background-color: #B932FE;
+  border-radius: 0.5rem;
+  height: 1rem;
+  width: 1.5rem;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  outline: 3px solid #bb00ff;
+  outline-offset: 0.125rem;
+}
+
+/*********** Firefox styles ***********/
+/* slider track */
+input[type="range"]::-moz-range-track {
+  background-color: #00eeff;
+  border-radius: 0.5rem;
+  height: 1rem;
+}
+
+/* slider thumb */
+input[type="range"]::-moz-range-thumb {
+  background-color: #bb00ff;
+  border: none; /*Removes extra border that FF applies*/
+  border-radius: 0.5rem;
+  height: 1rem;
+  width: 1.5rem;
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+  outline: 3px solid #bb00ff;
+  outline-offset: 0.125rem;
+}
+
+.bunnyNameInput {
+  padding: 6px;
+  font-family: Verdana;
+  font-size: 22px;
+  border-width: 1px;
+  background-color: #fff;
+  color: #000000;
+  border-style: solid;
+  border-radius: 20px;
+  text-shadow: 0px 0px 2px rgba(66, 66, 66, 0.75);
+}
+.bunny1 {
+  border-color: #ffbc36;
+  box-shadow: 2px 2px 5px rgba(255, 51, 52, 0.75);
+}
+.bunny2 {
+  border-color: #bcfe30;
+  box-shadow: 2px 2px 5px rgba(53, 255, 50, 0.75);
+}
+.bunnyNameInput:focus {
+  outline: none;
 }

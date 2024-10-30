@@ -1,62 +1,95 @@
 class Building {
-    constructor(x, tilesW, tilesH, tileSize) {
+    constructor(x, tilesW, tilesH, tileSize, columnWidth) {
         this.x = x;
         this.tilesW = tilesW;
         this.tilesH = tilesH;
+        this.tileSize = tileSize;
+        this.columnWidth = columnWidth;
         this.tiles = [];
-        const buildingColor = random(["cyan", "red", "gray"])
-        for (let j = 0; j < tilesH; j++) {
+        // this.mainColor = random(["cyan", "red", "grey"]);
+        this.mainColor = "#fff";
+        this.window = "#000";
+        this.build(this.tileSize, this.columnWidth);
+    }
+    build(tileSize, columnWidth) {
+        for (let j = 0; j < this.tilesH; j++) {
             let floor = [];
-            for (let i = 0; i < tilesW; i++) {
-                const tileX = this.x + (i * tileSize);
-                const tileY = height - tileSize - (j * tileSize);
-                let tileColor;
-                if (i % 3 === 1 && j % 4 === 1) {
-                    tileColor = random(["black", "yellow"])
-                } else if (i % 3 === 1 && j % 4 === 2) {
-                    tileColor = this.tiles[j - 1][i].color;
+            for (let i = 0; i < this.tilesW; i++) {
+                let tile;
+                const tileX = tileSize * i + this.x;
+                const tileY = height - (tileSize * j);
+                const tw = columnWidth * 3;
+                const th = columnWidth * 4;
+                if (
+                    i % tw >= columnWidth &&
+                    i % tw < tw - columnWidth &&
+                    j % th >= columnWidth &&
+                    j % th < th - columnWidth
+                ) {
+                    if (i % tw == columnWidth && j % th == columnWidth) {
+                        this.window = this.pickNewWindowColor();
+                    } else if (j % th > columnWidth) {
+                        this.window = this.pickWindowColorBelow(j, i);
+                    }
+                    tile = new Tile(tileX, tileY, tileSize, this.window, j);
                 } else {
-                    tileColor = buildingColor;
+                    tile = new Tile(tileX, tileY, tileSize, this.mainColor, j);
                 }
-                const tile = new Tile(tileX, tileY, tileSize, j, i, tileColor);
                 floor.push(tile);
             }
             this.tiles.push(floor);
         }
     }
-    show() {
-        for (const floor of this.tiles) {
-            for (const tile of floor) {
-                tile.show();
+    display() {
+        for (let j = 0; j < this.tiles.length; j++) {
+            const floor = this.tiles[j];
+            for (let i = 0; i < floor.length; i++) {
+                const tile = floor[i];
+                tile.display();
             }
         }
     }
-    getTile(floor, column) {
-        if (
-            floor >= 0 &&
-            floor < this.tilesH &&
-            column >= 0 &&
-            column < this.tilesW
-        ) {
-            return this.tiles[floor][column];
-        }
+    pickNewWindowColor() {
+        return color(random(["#454545", "#FFFFD6"]));
     }
-    destroy (tile) {
-        const tiles = [tile];
-        const f = tile.floor;
-        const c = tile.column;
-        tiles.push(this.getTile(f - 1, c));
-        tiles.push(this.getTile(f + 1, c));
-        tiles.push(this.getTile(f, c - 1));
-        tiles.push(this.getTile(f, c + 1));
-        for (let i = 0; i < tiles.length; i++) {
-            const t = tiles[i];
-            if (t) {
-                t.destroy();
+    pickWindowColorBelow(j, i) {
+        return this.tiles[j - 1][i].color
+    }
+    recolorBuilding(newColor) {
+        this.mainColor = newColor;
+        for (let j = 0; j < this.tiles.length; j++) {
+            const floor = this.tiles[j];
+            for (let i = 0; i < floor.length; i++) {
+                const tile = floor[i];
+                if (tile.getColor() === "#fff") {
+                    tile.setColor(this.mainColor);
+                }
             }
         }
     }
-    explode(tile, w, h) {
-        
+    collision(x, y, radius, roach) {
+        for (let j = this.tiles.length - 1; j >= 0; j--) {
+            const floor = this.tiles[j];
+            for (let i = floor.length - 1; i >= 0; i--) {
+                const tile = floor[i];
+                if (!tile.isDestroyed()) {
+                    const center = tile.getCenter();
+                    const d = dist(x, y, center.x, center.y);
+                    if (d <= radius) {
+                        if (roach) {
+                            roach.collided = true;
+                        }
+                        tile.destroy(this);
+                    }
+                }
+            }
+        }
+    }
+    getTop() {
+        const top = {
+            x: this.x + (this.tilesW * this.tileSize) / 2,
+            y: height - (this.tilesH * this.tileSize) + this.tileSize
+        }
+        return top;
     }
 }

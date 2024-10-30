@@ -1,50 +1,67 @@
-let buildings = []
-
-
+let game, spriteSheet, spriteJSON;
+let startScreen;
+let sprites = {};
 
 function preload() {
-    
+    spriteSheet = loadImage("./assets/bunny.png");
+    spriteJSON = loadJSON("./assets/bunny.json");
 }
 
 function setup() {
-    createCanvas(800, 600)
-    const tileSize = 6;
-    const gap = 2;
-    let buildingX = 0;
-    while (buildingX < width) {
-        let tw = floor(random(2, 6)) * 3
-        let th = floor(random(2, 11)) * 4
-        let building = new Building(buildingX, tw, th, tileSize);
-        buildingX += tw * tileSize + gap;
-        buildings.push(building)
-    }
+    createCanvas(800, 600);
+    sortSprites();
+    playAgain();
 }
 
 function draw() {
-    background("blue");
-    for (const building of buildings) {
-        building.show();
+    if (startScreen.isActive) {
+        startScreen.handleSlider();
+    }
+    if (game.gameStart) {
+        game.display();
+        game.checkMatchOver();
     }
 }
 
-function mouseClicked() {
-    for (let b = 0; b < buildings.length; b++) {
-        const building = buildings[b];
-        const tiles = building.tiles;
-        for (let f = 0; f < tiles.length; f++) {
-            const floor = tiles[f];
-            for (let t = 0; t < floor.length; t++) {
-                const tile = floor[t];
-                if (
-                    mouseX > tile.x &&
-                    mouseX < tile.x + tile.w &&
-                    mouseY > tile.y &&
-                    mouseY < tile.y + tile.h
-                ) {
-                    building.destroy(tile);
-                    // building.explode(tile, 10, 10);
-                }
-            }
-        }
+function mousePressed() {
+    if(game.waitingForShot()) {
+        game.makeARoach();
     }
+}
+
+function mouseReleased() {
+    if(game.waitingForShot()) {
+        game.shoot();
+    }
+}
+
+function sortSprites() {
+    const frames = spriteJSON.frames;
+    const keys = Object.keys(frames);
+    let lastAniKey = "";
+    let aniArray = [];
+    for (const key of keys) {
+        const aniKey = key.split("/")[0];
+        const fr = frames[key].frame
+        const img = spriteSheet.get(fr.x, fr.y, fr.w, fr.h);
+        if (lastAniKey != aniKey && lastAniKey) {
+            // add array to sprites
+            addToSprites(lastAniKey, aniArray);
+            aniArray = [];
+        }
+        aniArray.push(img);
+        lastAniKey = aniKey;    
+    }
+    addToSprites(lastAniKey, aniArray);
+}
+
+function addToSprites(key, array) {
+    sprites[key] = array;
+}
+
+function playAgain() {
+    removeElements();
+    background(0);
+    startScreen = new StartScreen();
+    game = new Game();
 }

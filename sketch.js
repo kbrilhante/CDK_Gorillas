@@ -1,18 +1,21 @@
 let buildings = []
 
-function preload() {
 
+
+function preload() {
+    
 }
 
 function setup() {
-    createCanvas(900, 600)
-    const tileSize = 10;
+    createCanvas(800, 600)
+    const tileSize = 6;
+    const gap = 2;
     let buildingX = 0;
     while (buildingX < width) {
         let tw = floor(random(2, 6)) * 3
         let th = floor(random(2, 11)) * 4
         let building = new Building(buildingX, tw, th, tileSize);
-        buildingX += tw * tileSize + 4;
+        buildingX += tw * tileSize + gap;
         buildings.push(building)
     }
 }
